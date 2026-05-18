@@ -116,19 +116,27 @@ function loadFooter() {
                 <div class="space-y-4 font-medium">
                     <p class="flex items-center gap-3 text-slate-300"><i class="fa-solid fa-phone text-emerald-500 w-5"></i> +91 7972581080</p>
                     <p class="flex items-center gap-3 text-slate-300"><i class="fa-solid fa-envelope text-emerald-500 w-5"></i> excession78@gmail.com</p>
-                    <p class="flex items-start gap-3 text-slate-300"><i class="fa-solid fa-location-dot text-emerald-500 w-5 mt-1"></i> Near Kalibadi Mandir, Surya Mandir Road, Aurangabad (Bihar)</p>
+                    <a href="https://maps.app.goo.gl/8aRrGSTTueEWR2pW7" target="_blank" class="flex items-start gap-3 text-slate-300 hover:text-emerald-400 transition-colors">
+                        <i class="fa-solid fa-location-dot text-emerald-500 w-5 mt-1"></i> 
+                        <span>Near Kalibadi Mandir, Surya Mandir Road, Aurangabad (Bihar)</span>
+                    </a>
                 </div>
                 
-                <div class="mt-8 flex gap-4">
-                    <a href="https://wa.me/91xxxxxxxxxx" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-emerald-500 text-white flex items-center justify-center transition-all"><i class="fa-brands fa-whatsapp"></i></a>
-                    <a href="https://instagram.com/excess_ion_acadmey" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-pink-600 text-white flex items-center justify-center transition-all"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-blue-600 text-white flex items-center justify-center transition-all"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="https://www.youtube.com/@ExcessIonAcademy" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-red-600 text-white flex items-center justify-center transition-all"><i class="fa-brands fa-youtube"></i></a>
+                <div class="mt-8 flex flex-wrap gap-4 items-center">
+                    <div class="flex gap-4">
+                        <a href="https://wa.me/91xxxxxxxxxx" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-emerald-500 text-white flex items-center justify-center transition-all"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a href="https://instagram.com/excess_ion_acadmey" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-pink-600 text-white flex items-center justify-center transition-all"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-blue-600 text-white flex items-center justify-center transition-all"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="https://www.youtube.com/@ExcessIonAcademy" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-red-600 text-white flex items-center justify-center transition-all"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                    <a href="https://maps.app.goo.gl/8aRrGSTTueEWR2pW7" target="_blank" class="inline-flex items-center gap-2 text-xs font-bold text-emerald-400 border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 rounded-lg hover:bg-emerald-500 hover:text-white transition-all">
+                        <i class="fa-solid fa-map-location-dot"></i> Open in Map
+                    </a>
                 </div>
             </div>
 
             <div class="relative w-full h-56 md:h-64 bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 shadow-xl">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3625.9238378512!2d84.37345!3d24.74567!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x398c7fd2e64627d3%3A0x1a83605f88426021!2sExcess%20Ion%20Academy!5e0!3m2!1sen!2sin!4v1716000000000!5m2!1sen!2sin" class="w-full h-full" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2826.1330494794674!2d84.38097947406352!3d24.74440214989424!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x398cfd125142232f%3A0xba327501bd9db0a3!2sExcess%20Ion!5e1!3m2!1sen!2sin!4v1779115832109!5m2!1sen!2sin" class="w-full h-full" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div>
     </section>
