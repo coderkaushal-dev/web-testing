@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+html { 
+    scroll-behavior: smooth; 
+}
+
+/* Custom Professional Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f3f4f6; 
+}
+::-webkit-scrollbar-thumb {
+    background: #10b981; /* Emerald 500 */
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #047857; /* Emerald 700 */
+}
+
+/* Scroll Reveal Utility Classes */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
