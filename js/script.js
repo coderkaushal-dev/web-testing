@@ -11,15 +11,43 @@ function toggleModal() {
     if (modal) modal.classList.toggle('hidden');
 }
 
-function submitModalForm(event) {
+// --- FIREBASE LOGIC FOR MODAL FORM ---
+async function submitModalForm(event) {
     event.preventDefault();
-    const name = document.getElementById('m-name').value;
-    const phone = document.getElementById('m-phone').value;
-    const exam = document.getElementById('m-exam').value;
+    
+    // Button par loading animation dikhane ke liye
+    const submitBtn = event.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+    submitBtn.disabled = true;
 
-    alert(`Registration Confirmed!\nName: ${name}\nPhone: ${phone}\nWe will contact you shortly.`);
-    event.target.reset();
-    toggleModal();
+    // Fetching all inputs from the Modal Form
+    const data = {
+        name: document.getElementById('m-name').value,
+        phone: document.getElementById('m-phone').value,
+        email: document.getElementById('m-email').value,
+        studentClass: document.getElementById('m-class').value,
+        board: document.getElementById('m-board').value,
+        language: document.getElementById('m-lang').value,
+        competitiveExam: document.getElementById('m-exam').value,
+        address: document.getElementById('m-address').value,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp() // Exact server time
+    };
+
+    try {
+        // Saving directly to Firestore DB Collection named 'demo_registrations'
+        await db.collection('demo_registrations').add(data);
+        
+        alert(`Registration Confirmed Successfully!\nHi ${data.name}, our team will contact you at ${data.phone} soon.`);
+        event.target.reset(); // Form clear karna
+        toggleModal(); // Modal close karna
+    } catch (error) {
+        console.error("Firebase Error: ", error);
+        alert("Server error! Please make sure your firebase-config.js is setup correctly.");
+    } finally {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    }
 }
 
 // --- INTERACTIVE CAROUSEL WITH ARROWS ---
@@ -76,13 +104,13 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        startAutoSlide(); // Launch
+        startAutoSlide(); // Launch Auto Slide
     }
     
-    revealOnScroll();
+    revealOnScroll(); // Trigger animations on load
 });
 
-// Scroll Reveal
+// Scroll Reveal Animations
 const reveals = document.querySelectorAll('.reveal');
 function revealOnScroll() {
     for (let i = 0; i < reveals.length; i++) {

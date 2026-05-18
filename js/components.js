@@ -128,7 +128,7 @@ function loadFooter() {
             </div>
 
             <div class="relative w-full h-56 md:h-64 bg-slate-800 rounded-2xl overflow-hidden border border-slate-700 shadow-xl">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3625.961448332152!2d84.373456!3d24.745345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x398c7fc444444445%3A0x1111111111111111!2sSurya+Mandir+Road%2C+Aurangabad%2C+Bihar!5e0!3m2!1sen!2sin!4v1716000000000!5m2!1sen!2sin" class="w-full h-full" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3625.9238378512!2d84.37345!3d24.74567!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x398c7fd2e64627d3%3A0x1a83605f88426021!2sExcess%20Ion%20Academy!5e0!3m2!1sen!2sin!4v1716000000000!5m2!1sen!2sin" class="w-full h-full" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div>
     </section>
