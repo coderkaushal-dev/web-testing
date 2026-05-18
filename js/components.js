@@ -116,7 +116,7 @@ function loadFooter() {
                 <div class="space-y-4 font-medium">
                     <p class="flex items-center gap-3 text-slate-300"><i class="fa-solid fa-phone text-emerald-500 w-5"></i> +91 7972581080</p>
                     <p class="flex items-center gap-3 text-slate-300"><i class="fa-solid fa-envelope text-emerald-500 w-5"></i> excession78@gmail.com</p>
-                    <a href="https://maps.app.goo.gl/8aRrGSTTueEWR2pW7" target="_blank" class="flex items-start gap-3 text-slate-300 hover:text-emerald-400 transition-colors">
+                    <a href="https://www.google.com/maps/place/Excess+Ion/@24.7443973,84.3835544,649m/data=!3m2!1e3!4b1!4m6!3m5!1s0x398cfd125142232f:0xba327501bd9db0a3!8m2!3d24.7443973!4d84.3835544!16s%2Fg%2F11xkm7b7h2?entry=ttu&g_ep=EgoyMDI2MDUxMy4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="flex items-start gap-3 text-slate-300 hover:text-emerald-400 transition-colors">
                         <i class="fa-solid fa-location-dot text-emerald-500 w-5 mt-1"></i> 
                         <span>Near Kalibadi Mandir, Surya Mandir Road, Aurangabad (Bihar)</span>
                     </a>
@@ -128,8 +128,8 @@ function loadFooter() {
                         <a href="https://instagram.com/excess_ion_acadmey" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-pink-600 text-white flex items-center justify-center transition-all"><i class="fa-brands fa-instagram"></i></a>
                         <a href="#" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-blue-600 text-white flex items-center justify-center transition-all"><i class="fa-brands fa-facebook-f"></i></a>
                         <a href="https://www.youtube.com/@ExcessIonAcademy" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-red-600 text-white flex items-center justify-center transition-all"><i class="fa-brands fa-youtube"></i></a>
-                    </div>
-                    <a href="https://maps.app.goo.gl/8aRrGSTTueEWR2pW7" target="_blank" class="inline-flex items-center gap-2 text-xs font-bold text-emerald-400 border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 rounded-lg hover:bg-emerald-500 hover:text-white transition-all">
+                    </div> 
+                    <a href="https://www.google.com/maps/place/Excess+Ion/@24.7443973,84.3835544,649m/data=!3m2!1e3!4b1!4m6!3m5!1s0x398cfd125142232f:0xba327501bd9db0a3!8m2!3d24.7443973!4d84.3835544!16s%2Fg%2F11xkm7b7h2?entry=ttu&g_ep=EgoyMDI2MDUxMy4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="inline-flex items-center gap-2 text-xs font-bold text-emerald-400 border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 rounded-lg hover:bg-emerald-500 hover:text-white transition-all">
                         <i class="fa-solid fa-map-location-dot"></i> Open in Map
                     </a>
                 </div>
