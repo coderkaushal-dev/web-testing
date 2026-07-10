@@ -7,6 +7,10 @@
     <link href="./css/style.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="./js/firebase-config.js"></script>
 </head>
 <body class="bg-slate-950 text-slate-100">
     <div id="header-placeholder"></div>
@@ -19,36 +23,56 @@
             </div>
 
             <div id="notes-container" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                </div>
+                <p id="loading-text" class="text-slate-400 text-center col-span-full">Loading notes from database... <i class="fa-solid fa-spinner fa-spin ml-2"></i></p>
+            </div>
         </div>
     </section>
 
     <div id="footer-placeholder"></div>
     <script src="./js/components.js"></script>
+    
     <script>
-        // --- YE AAPKA DATABASE HAI ---
-        const notesDB = [
-            { class: "10th", subject: "Physics", title: "Light - Reflection & Refraction", link: "https://drive.google.com/..." },
-            { class: "12th", subject: "Chemistry", title: "Electrochemistry Full Notes", link: "https://drive.google.com/..." },
-            { class: "9th", subject: "Maths", title: "Number Systems - NCERT Solutions", link: "https://drive.google.com/..." },
-            { class: "NEET", subject: "Biology", title: "Human Physiology Masterclass", link: "https://drive.google.com/..." }
-        ];
+        async function fetchNotes() {
+            const container = document.getElementById('notes-container');
+            const loadingText = document.getElementById('loading-text');
 
-        const container = document.getElementById('notes-container');
-        notesDB.forEach(note => {
-            container.innerHTML += `
-            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl hover:border-emerald-500 transition-all group">
-                <div class="flex justify-between items-start mb-4">
-                    <span class="bg-emerald-500/10 text-emerald-400 text-[10px] font-bold px-3 py-1 rounded-full uppercase">${note.class}</span>
-                    <i class="fa-solid fa-file-pdf text-2xl text-slate-700 group-hover:text-red-500 transition-colors"></i>
-                </div>
-                <h4 class="text-sm font-bold text-slate-400 uppercase tracking-widest">${note.subject}</h4>
-                <h3 class="text-xl font-bold text-white mt-1 mb-6 leading-tight">${note.title}</h3>
-                <a href="${note.link}" target="_blank" class="flex items-center justify-center gap-2 w-full bg-slate-800 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl transition-all">
-                    <i class="fa-solid fa-download text-sm"></i> Download PDF
-                </a>
-            </div>`;
-        });
+            try {
+                // Firebase ki 'notes' collection se data fetch kar rahe hain
+                const snapshot = await db.collection('notes').get();
+                
+                // Loading text hatao
+                if (loadingText) loadingText.remove();
+                
+                if (snapshot.empty) {
+                    container.innerHTML = `<p class="text-slate-500 text-center col-span-full py-10">No notes uploaded yet. Check back soon!</p>`;
+                    return;
+                }
+
+                // Har ek note ke liye HTML card generate karna
+                snapshot.forEach(doc => {
+                    const note = doc.data();
+                    container.innerHTML += `
+                    <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl hover:border-emerald-500 transition-all group">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-emerald-500/10 text-emerald-400 text-[10px] font-bold px-3 py-1 rounded-full uppercase">${note.class}</span>
+                            <i class="fa-solid fa-file-pdf text-2xl text-slate-700 group-hover:text-red-500 transition-colors"></i>
+                        </div>
+                        <h4 class="text-sm font-bold text-slate-400 uppercase tracking-widest">${note.subject}</h4>
+                        <h3 class="text-xl font-bold text-white mt-1 mb-6 leading-tight">${note.title}</h3>
+                        <a href="${note.link}" target="_blank" class="flex items-center justify-center gap-2 w-full bg-slate-800 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl transition-all">
+                            <i class="fa-solid fa-download text-sm"></i> Download PDF
+                        </a>
+                    </div>`;
+                });
+            } catch (error) {
+                console.error("Error fetching notes: ", error);
+                if (loadingText) loadingText.remove();
+                container.innerHTML = `<p class="text-red-400 text-center col-span-full">Failed to load notes. Please check database connection.</p>`;
+            }
+        }
+
+        // Page load hote hi function call ho jayega
+        document.addEventListener('DOMContentLoaded', fetchNotes);
     </script>
 </body>
 </html>

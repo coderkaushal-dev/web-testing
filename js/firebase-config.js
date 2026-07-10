@@ -1,12 +1,12 @@
 // js/firebase-config.js
 
-const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+const firebaseConfig = { 
+    apiKey: "AIzaSyBgKbi7U1F_wMflgf8-SiX97X_f06hB6Io",
+    authDomain: "mylinkhub-ea198.firebaseapp.com", 
+    projectId: "mylinkhub-ea198", 
+    storageBucket: "mylinkhub-ea198.firebasestorage.app", 
+    messagingSenderId: "127986959992",
+    appId: "1:127986959992:web:60b3d604c0187211264f8d"
 };
 
 // Initialize Firebase (Compat Version for Vanilla JS)

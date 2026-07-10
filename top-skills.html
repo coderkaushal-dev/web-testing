@@ -39,13 +39,23 @@
             We are building an exclusive section to help you master real-world skills, coding, and spoken English. Get ready to upgrade yourself.
         </p>
 
-        <form id="notifyForm" onsubmit="saveNotificationEmail(event)" class="mt-10 flex flex-col sm:flex-row gap-3 w-full max-w-md mx-auto relative z-10">
-            <input type="email" id="notify-email" required placeholder="Enter your email to get notified" 
-                   class="flex-1 bg-slate-900/80 border border-slate-700 rounded-xl px-5 py-3.5 text-sm text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all backdrop-blur-md">
+        <form id="notifyForm" onsubmit="saveNotificationEmail(event)" class="mt-10 flex flex-col gap-3 w-full max-w-md mx-auto relative z-10">
+            <select id="notify-interest" required class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-5 py-3.5 text-sm text-slate-300 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all backdrop-blur-md appearance-none">
+                <option value="" disabled selected>Select course you are interested in</option>
+                <option value="Video Editing">Video Editing</option>
+                <option value="AI & Development">AI & Development</option>
+                <option value="Robotics & IoT">Robotics & IoT</option>
+                <option value="All"> All</option>
+            </select>
             
-            <button type="submit" id="notify-btn" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-8 py-3.5 rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] hover:-translate-y-0.5">
-                Notify Me
-            </button>
+            <div class="flex flex-col sm:flex-row gap-3">
+                <input type="email" id="notify-email" required placeholder="Enter your email" 
+                       class="flex-1 bg-slate-900/80 border border-slate-700 rounded-xl px-5 py-3.5 text-sm text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all backdrop-blur-md">
+                
+                <button type="submit" id="notify-btn" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-8 py-3.5 rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] hover:-translate-y-0.5 whitespace-nowrap">
+                    Notify Me
+                </button>
+            </div>
         </form>
     </section>
 
@@ -101,6 +111,7 @@
         async function saveNotificationEmail(event) {
             event.preventDefault();
             const emailInput = document.getElementById('notify-email');
+            const interestInput = document.getElementById('notify-interest');
             const btn = document.getElementById('notify-btn');
             
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
@@ -110,6 +121,7 @@
                 // Save to 'top_skills_notify' collection in Firebase
                 await db.collection('top_skills_notify').add({
                     email: emailInput.value,
+                    interest: interestInput.value,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 
@@ -123,7 +135,7 @@
                 }, 3000);
             } catch (error) {
                 console.error("Error writing document: ", error);
-                alert("Something went wrong. Please check your DB connection.");
+                showCustomAlert("Error", "Something went wrong. Please check your DB connection.", "error");
                 btn.innerHTML = 'Notify Me';
                 btn.disabled = false;
             }

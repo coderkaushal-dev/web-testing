@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Excess Ion Academy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="./js/firebase-config.js"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+
+    <nav class="bg-slate-900 border-b border-slate-800 p-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2">
+                <img src="./assets/images/logo.png" alt="Logo" class="h-8 w-auto">
+                <h2 class="text-xl font-bold text-emerald-500 hidden sm:block">EIA Dashboard</h2>
+            </a>
+            <button onclick="logout()" class="text-slate-400 hover:text-red-400 transition-all text-sm font-semibold border border-slate-700 hover:border-red-500/50 px-4 py-2 rounded-lg">
+                <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
+            </button>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+        
+        <div class="flex flex-col md:flex-row gap-6 justify-between items-start md:items-center bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-lg">
+            <div class="flex items-center gap-4">
+                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-emerald-500 overflow-hidden bg-slate-800 flex-shrink-0">
+                    <img id="p-photo" src="https://via.placeholder.com/150" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <h3 id="p-name" class="text-xl sm:text-2xl font-bold text-white">Loading...</h3>
+                    <p id="p-id" class="text-emerald-400 font-mono text-xs sm:text-sm uppercase"></p>
+                </div>
+            </div>
+
+            <div class="flex bg-slate-950 p-1.5 rounded-xl border border-slate-800 w-full md:w-auto">
+                <button id="tab-offline" onclick="switchTab('offline')" class="flex-1 md:w-40 py-2.5 rounded-lg text-sm font-bold bg-emerald-600 text-white shadow-md transition-all">
+                    Offline Coaching
+                </button>
+                <button id="tab-online" onclick="switchTab('online')" class="flex-1 md:w-40 py-2.5 rounded-lg text-sm font-bold text-slate-400 hover:text-white transition-all">
+                    Top Skills <span class="text-[10px] bg-amber-500/20 text-amber-500 px-1.5 py-0.5 rounded ml-1 uppercase">Pro</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="offline-section" class="space-y-6 block transition-opacity duration-300">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+                    <h4 class="text-slate-400 text-xs font-bold uppercase tracking-wider mb-4">Batch Info</h4>
+                    <div class="space-y-3">
+                        <div class="flex justify-between border-b border-slate-800 pb-2">
+                            <span class="text-slate-400 text-sm">Class</span>
+                            <span id="p-class" class="font-bold text-white">---</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400 text-sm">Type</span>
+                            <span id="p-type" class="font-bold text-emerald-400">---</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+                    <h4 class="text-slate-400 text-xs font-bold uppercase tracking-wider mb-4">Monthly Attendance</h4>
+                    <div class="flex items-end justify-between">
+                        <div>
+                            <h2 id="att-percent" class="text-4xl font-extrabold text-white">0%</h2>
+                            <p id="att-stats" class="text-slate-500 text-xs mt-1">0 days attended</p>
+                        </div>
+                        <div class="text-emerald-500 text-3xl mb-2 opacity-20"><i class="fa-solid fa-calendar-check"></i></div>
+                    </div>
+                    <div class="mt-4 w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                        <div id="att-bar" class="bg-emerald-500 h-full transition-all duration-1000" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+                    <h4 class="text-slate-400 text-xs font-bold uppercase tracking-wider mb-4">Fee Status</h4>
+                    <div>
+                        <p class="text-slate-500 text-xs">Due Date: <span id="fee-due-date" class="text-amber-400 font-semibold">Loading...</span></p>
+                        <h2 id="fee-due-amount" class="text-3xl font-extrabold text-white mt-1">₹0</h2>
+                        <button id="pay-now-btn" class="mt-4 w-full bg-emerald-600 hover:bg-emerald-500 transition-all text-white text-sm font-bold py-2 rounded-lg disabled:bg-slate-800 disabled:text-slate-500 disabled:cursor-not-allowed">
+                            Pay Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden">
+                <div class="p-5 border-b border-slate-800 flex justify-between items-center">
+                    <h3 class="text-lg font-bold">Test Performance</h3>
+                    <div class="text-xs text-slate-400">Avg Score: <span id="avg-score" class="font-bold text-amber-400 ml-1">0%</span></div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-950 text-slate-400 text-xs uppercase">
+                            <tr>
+                                <th class="p-4">Test Name</th>
+                                <th class="p-4">Marks</th>
+                                <th class="p-4">% Score</th>
+                                <th class="p-4">Rank</th>
+                            </tr>
+                        </thead>
+                        <tbody id="test-table-body">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden">
+                <div class="p-5 border-b border-slate-800">
+                    <h3 class="text-lg font-bold">Payment History</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-950 text-slate-400 text-xs uppercase">
+                            <tr>
+                                <th class="p-4">Transaction ID</th>
+                                <th class="p-4">Date</th>
+                                <th class="p-4">Amount</th>
+                                <th class="p-4">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payment-history-body">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="online-section" class="hidden space-y-6 transition-opacity duration-300">
+            
+            <div id="online-courses-container" class="space-y-4">
+                </div>
+
+            <div id="online-empty-state" class="hidden bg-slate-900 border-2 border-dashed border-slate-700 rounded-3xl p-10 text-center relative overflow-hidden">
+                <div class="absolute inset-0 bg-emerald-500/5 blur-3xl pointer-events-none"></div>
+                <div class="relative z-10">
+                    <i class="fa-solid fa-laptop-code text-6xl text-slate-600 mb-6"></i>
+                    <h2 class="text-2xl font-extrabold text-white mb-3">No Active Top Skills Batches</h2>
+                    <p class="text-slate-400 max-w-md mx-auto mb-8">You haven't enrolled in any of our premium Top Skills courses like Video Editing, AI, or Spoken English yet.</p>
+                    <a href="top-skills.html" class="inline-block bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-lg hover:-translate-y-1">
+                        Explore Courses
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <div id="messageModal" class="fixed inset-0 z-[100] overflow-y-auto hidden">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+            <div onclick="toggleMessageModal()" class="fixed inset-0 transition-opacity bg-slate-950/80 backdrop-blur-sm"></div>
+            
+            <div class="inline-block overflow-hidden text-left align-bottom transition-all transform bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl sm:my-8 sm:align-middle w-full max-w-md">
+                <div class="p-6 sm:p-8 text-center relative">
+                    <div id="messageModalIcon" class="w-16 h-16 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-3xl mx-auto mb-6">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <h3 id="messageModalTitle" class="text-xl font-bold text-white mb-2">Success!</h3>
+                    <p id="messageModalText" class="text-sm text-slate-400 mb-6">Your message has been sent.</p>
+                    
+                    <button onclick="toggleMessageModal()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition-all shadow-md">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/dashboard.js"></script>
+</body>
+</html>

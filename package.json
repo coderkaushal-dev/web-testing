@@ -3,7 +3,7 @@
     "dev": "tailwindcss -i ./src/input.css -o ./css/style.css --watch"
   },
   "devDependencies": {
-    "tailwindcss": "^4.3.0",
-    "@tailwindcss/cli": "^4.3.0"
+    "@tailwindcss/cli": "^4.3.2",
+    "tailwindcss": "^4.3.0"
   }
 }

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login - Excess Ion Academy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="./js/firebase-config.js"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 flex items-center justify-center min-h-screen">
+
+    <div class="w-full max-w-md p-8 bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-extrabold text-white">Student <span class="text-emerald-500">Login</span></h1>
+            <p class="text-slate-400 mt-2">Access your Academy Dashboard</p>
+        </div>
+
+        <form id="loginForm" class="space-y-5">
+            <div>
+                <label class="block text-sm font-medium mb-1.5">Student ID</label>
+                <input type="text" id="studentId" placeholder="e.g. EIA-2025-001" required 
+                    class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 transition-all">
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1.5">Date of Birth (Password)</label>
+                <input type="date" id="dob" required 
+                    class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500 transition-all text-slate-400">
+            </div>
+            <button type="submit" id="loginBtn" 
+                class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-emerald-600/20 transition-all">
+                Login to Dashboard
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('loginBtn');
+            const sId = document.getElementById('studentId').value.trim();
+            const dob = document.getElementById('dob').value;
+
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verifying...';
+            
+            try {
+                const doc = await db.collection('students').doc(sId).get();
+                if (doc.exists && doc.data().dob === dob) {
+                    localStorage.setItem('loggedInStudentId', sId);
+                    window.location.href = 'dashboard.html';
+                } else {
+                    alert("Invalid Student ID or DOB!");
+                }
+            } catch (err) {
+    console.error("ASLI ERROR: ", err);
+    alert("Real Error: " + err.message);
+} finally {
+                btn.innerText = 'Login to Dashboard';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -38,12 +38,12 @@ async function submitModalForm(event) {
         // Saving directly to Firestore DB Collection named 'demo_registrations'
         await db.collection('demo_registrations').add(data);
         
-        alert(`Registration Confirmed Successfully!\nHi ${data.name}, our team will contact you at ${data.phone} soon.`);
+        showCustomAlert('Registration Confirmed!', `Hi ${data.name}, our team will contact you at ${data.phone} soon.`, 'success');
         event.target.reset(); // Form clear karna
         toggleModal(); // Modal close karna
     } catch (error) {
         console.error("Firebase Error: ", error);
-        alert("Server error! Please make sure your firebase-config.js is setup correctly.");
+        showCustomAlert('Server Error', 'Please make sure your firebase-config.js is setup correctly.', 'error');
     } finally {
         submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;
