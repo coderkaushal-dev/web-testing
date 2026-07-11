@@ -42,7 +42,7 @@ function loadHeader() {
                 <a href="index.html#home" class="mobile-link hover:text-emerald-400">Home</a>
                 <a href="notes.html" class="mobile-link hover:text-emerald-400">Notes</a>
                 <a href="index.html#batches" class="mobile-link hover:text-emerald-400">Batches</a>
-                <a href="top-skills.html" class="mobile-link hover:text-emerald-400 text-amber-500">Top Skills (New)</a>
+                <a href="top-skills.html" class="mobile-link hover:text-emerald-400 text-amber-500">Top Skills (Coming Soon)</a>
                 <hr class="border-slate-800 my-2">
                 <a href="login.html" class="mobile-link text-emerald-400 hover:text-emerald-300 flex items-center gap-2">
                     <i class="fa-solid fa-user-graduate"></i> Student Login

@@ -12,36 +12,28 @@ function logout() {
     window.location.href = 'login.html';
 }
 
-// Custom Tab Switching Logic
+// Custom 3-Tab Switching Logic
 function switchTab(tabName) {
-    const offlineSec = document.getElementById('offline-section');
-    const onlineSec = document.getElementById('online-section');
-    const btnOffline = document.getElementById('tab-offline');
-    const btnOnline = document.getElementById('tab-online');
-
-    if(tabName === 'offline') {
-        offlineSec.classList.remove('hidden');
-        onlineSec.classList.add('hidden');
+    const tabs = ['offline', 'batches', 'online'];
+    
+    tabs.forEach(t => {
+        const section = document.getElementById(`${t}-section`);
+        const btn = document.getElementById(`tab-${t}`);
         
-        // Active Styles for Offline Button
-        btnOffline.className = "flex-1 md:w-40 py-2.5 rounded-lg text-sm font-bold bg-emerald-600 text-white shadow-md transition-all";
-        // Inactive Styles for Online Button
-        btnOnline.className = "flex-1 md:w-40 py-2.5 rounded-lg text-sm font-bold text-slate-400 hover:text-white transition-all";
-    } else {
-        onlineSec.classList.remove('hidden');
-        offlineSec.classList.add('hidden');
-        
-        // Active Styles for Online Button
-        btnOnline.className = "flex-1 md:w-40 py-2.5 rounded-lg text-sm font-bold bg-emerald-600 text-white shadow-md transition-all";
-        // Inactive Styles for Offline Button
-        btnOffline.className = "flex-1 md:w-40 py-2.5 rounded-lg text-sm font-bold text-slate-400 hover:text-white transition-all";
-    }
+        if (t === tabName) {
+            section.classList.remove('hidden');
+            btn.className = "flex-1 sm:w-36 py-2.5 rounded-lg text-sm font-bold bg-emerald-600 text-white shadow-md transition-all whitespace-nowrap";
+        } else {
+            section.classList.add('hidden');
+            btn.className = "flex-1 sm:w-36 py-2.5 rounded-lg text-sm font-bold text-slate-400 hover:text-white transition-all whitespace-nowrap";
+        }
+    });
 }
 
 // Expandable Course Card Toggle
-function toggleCourseCard(courseIndex) {
-    const content = document.getElementById(`content-course-${courseIndex}`);
-    const icon = document.getElementById(`icon-course-${courseIndex}`);
+function toggleCourseCard(idPrefix) {
+    const content = document.getElementById(`content-${idPrefix}`);
+    const icon = document.getElementById(`icon-${idPrefix}`);
     
     if (content.classList.contains('hidden')) {
         content.classList.remove('hidden');
@@ -52,6 +44,7 @@ function toggleCourseCard(courseIndex) {
     }
 }
 
+// Modal Logic
 function toggleMessageModal() {
     const modal = document.getElementById('messageModal');
     if (modal) modal.classList.toggle('hidden');
@@ -67,8 +60,8 @@ function showCustomAlert(title, message, type = 'info') {
     const iconContainer = document.getElementById('messageModalIcon');
     const icon = iconContainer.querySelector('i');
 
-    iconContainer.className = 'w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-6'; // Reset
-    icon.className = ''; // Reset
+    iconContainer.className = 'w-16 h-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-6'; 
+    icon.className = ''; 
 
     if (type === 'success') {
         iconContainer.classList.add('bg-emerald-500/10', 'text-emerald-400');
@@ -76,8 +69,8 @@ function showCustomAlert(title, message, type = 'info') {
     } else if (type === 'error') {
         iconContainer.classList.add('bg-red-500/10', 'text-red-400');
         icon.classList.add('fa-solid', 'fa-circle-xmark');
-    } else { // info
-        iconContainer.classList.add('bg-sky-500/10', 'text-sky-400');
+    } else { 
+        iconContainer.classList.add('bg-blue-500/10', 'text-blue-400');
         icon.classList.add('fa-solid', 'fa-circle-info');
     }
 
@@ -85,7 +78,6 @@ function showCustomAlert(title, message, type = 'info') {
         toggleMessageModal();
     }
 }
-
 
 async function fetchDashboardData() {
     try {
@@ -103,33 +95,79 @@ async function fetchDashboardData() {
         document.getElementById('p-type').innerText = data.type || "Offline"; 
         if(data.photoUrl) document.getElementById('p-photo').src = data.photoUrl;
 
-        // --- NEW: TOP SKILLS LOGIC ---
+        // --- NEW: MY BATCHES (ACADEMIC) LOGIC ---
+        const academicContainer = document.getElementById('academic-batches-container');
+        const academicEmptyState = document.getElementById('academic-empty-state');
+        academicContainer.innerHTML = '';
+
+        if (data.academicBatches && Array.isArray(data.academicBatches) && data.academicBatches.length > 0) {
+            academicEmptyState.classList.add('hidden'); 
+            
+            data.academicBatches.forEach((batchName, index) => {
+                const cardHTML = `
+                <div class="bg-slate-900 border border-slate-700 rounded-2xl overflow-hidden shadow-lg transition-all hover:border-blue-500/50">
+                    <button onclick="toggleCourseCard('academic-${index}')" class="w-full p-6 sm:p-8 flex justify-between items-center hover:bg-slate-800/50 transition-colors text-left group">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-xl group-hover:bg-blue-500 group-hover:text-white transition-all">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl sm:text-2xl font-extrabold text-white">${batchName}</h3>
+                                <p class="text-xs sm:text-sm text-blue-400 font-bold mt-1 tracking-wider uppercase">Academic Batch</p>
+                            </div>
+                        </div>
+                        <i id="icon-academic-${index}" class="fa-solid fa-chevron-down text-xl text-slate-400 transition-transform duration-300"></i>
+                    </button>
+                    
+                    <div id="content-academic-${index}" class="hidden border-t border-slate-800 bg-slate-950 p-6 sm:p-8">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <a href="https://discord.gg/YOUR_INVITE_LINK" target="_blank" class="bg-[#5865F2] hover:bg-[#4752C4] text-white py-4 px-4 rounded-xl text-center transition-all flex flex-col items-center justify-center gap-3 shadow-lg hover:-translate-y-1">
+                                <i class="fa-brands fa-discord text-3xl"></i>
+                                <span class="font-bold text-sm">Join Live Class</span>
+                            </a>
+                            <button onclick="showCustomAlert('Info', 'Recorded lectures will be available here after class.', 'info')" class="bg-slate-800 hover:bg-blue-600 text-white py-4 px-4 rounded-xl text-center transition-all flex flex-col items-center justify-center gap-3 border border-slate-700 hover:border-blue-500">
+                                <i class="fa-solid fa-circle-play text-3xl"></i>
+                                <span class="font-bold text-sm">Recorded Lectures</span>
+                            </button>
+                            <button onclick="showCustomAlert('Success', 'Notes & Assignments downloaded!', 'success')" class="bg-slate-800 hover:bg-blue-600 text-white py-4 px-4 rounded-xl text-center transition-all flex flex-col items-center justify-center gap-3 border border-slate-700 hover:border-blue-500">
+                                <i class="fa-solid fa-book text-3xl"></i>
+                                <span class="font-bold text-sm">Study Material</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                `;
+                academicContainer.innerHTML += cardHTML;
+            });
+        } else {
+            academicEmptyState.classList.remove('hidden');
+        }
+
+        // --- TOP SKILLS LOGIC (Unchanged, just adapted IDs) ---
         const topSkillsContainer = document.getElementById('online-courses-container');
-        const emptyState = document.getElementById('online-empty-state');
+        const onlineEmptyState = document.getElementById('online-empty-state');
         topSkillsContainer.innerHTML = '';
 
-        // Check if student has topSkills array in database
         if (data.topSkills && Array.isArray(data.topSkills) && data.topSkills.length > 0) {
-            emptyState.classList.add('hidden'); // Hide empty state banner
+            onlineEmptyState.classList.add('hidden'); 
             
-            // Loop through each enrolled skill and create a card
             data.topSkills.forEach((skillName, index) => {
                 const cardHTML = `
                 <div class="bg-slate-900 border border-slate-700 rounded-2xl overflow-hidden shadow-lg transition-all hover:border-emerald-500/50">
-                    <button onclick="toggleCourseCard(${index})" class="w-full p-6 sm:p-8 flex justify-between items-center hover:bg-slate-800/50 transition-colors text-left group">
+                    <button onclick="toggleCourseCard('skill-${index}')" class="w-full p-6 sm:p-8 flex justify-between items-center hover:bg-slate-800/50 transition-colors text-left group">
                         <div class="flex items-center gap-4">
                             <div class="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-xl group-hover:bg-emerald-500 group-hover:text-white transition-all">
-                                <i class="fa-solid fa-code"></i>
+                                <i class="fa-solid fa-laptop-code"></i>
                             </div>
                             <div>
                                 <h3 class="text-xl sm:text-2xl font-extrabold text-white">${skillName}</h3>
-                                <p class="text-xs sm:text-sm text-emerald-400 font-bold mt-1 tracking-wider uppercase">Active Subscription</p>
+                                <p class="text-xs sm:text-sm text-emerald-400 font-bold mt-1 tracking-wider uppercase">Pro Skill Batch</p>
                             </div>
                         </div>
-                        <i id="icon-course-${index}" class="fa-solid fa-chevron-down text-xl text-slate-400 transition-transform duration-300"></i>
+                        <i id="icon-skill-${index}" class="fa-solid fa-chevron-down text-xl text-slate-400 transition-transform duration-300"></i>
                     </button>
                     
-                    <div id="content-course-${index}" class="hidden border-t border-slate-800 bg-slate-950 p-6 sm:p-8">
+                    <div id="content-skill-${index}" class="hidden border-t border-slate-800 bg-slate-950 p-6 sm:p-8">
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <a href="https://discord.gg/YOUR_INVITE_LINK" target="_blank" class="bg-[#5865F2] hover:bg-[#4752C4] text-white py-4 px-4 rounded-xl text-center transition-all flex flex-col items-center justify-center gap-3 shadow-lg hover:-translate-y-1">
                                 <i class="fa-brands fa-discord text-3xl"></i>
@@ -141,7 +179,7 @@ async function fetchDashboardData() {
                             </button>
                             <button onclick="showCustomAlert('Success', 'Assets downloaded successfully!', 'success')" class="bg-slate-800 hover:bg-emerald-600 text-white py-4 px-4 rounded-xl text-center transition-all flex flex-col items-center justify-center gap-3 border border-slate-700 hover:border-emerald-500">
                                 <i class="fa-solid fa-folder-open text-3xl"></i>
-                                <span class="font-bold text-sm">Study Material</span>
+                                <span class="font-bold text-sm">Study Material & Assets</span>
                             </button>
                         </div>
                     </div>
@@ -150,16 +188,12 @@ async function fetchDashboardData() {
                 topSkillsContainer.innerHTML += cardHTML;
             });
         } else {
-            // No skills enrolled, show upsell banner
-            emptyState.classList.remove('hidden');
+            onlineEmptyState.classList.remove('hidden');
         }
-        // ------------------------------
 
-        // 2. Fetch Attendance (Current Month)
-        const attDoc = await db.collection('attendance')
-            .where('studentId', '==', studentId)
-            .limit(1).get();
+        // --- REST OF THE CODE (Attendance, Tests, Fees, Payment History) REMAINS SAME ---
         
+        const attDoc = await db.collection('attendance').where('studentId', '==', studentId).limit(1).get();
         if (!attDoc.empty) {
             const att = attDoc.docs[0].data();
             const percent = Math.round((att.presentDays / att.totalClasses) * 100);
@@ -168,15 +202,10 @@ async function fetchDashboardData() {
             document.getElementById('att-bar').style.width = percent + '%';
         }
 
-        // 3. Fetch Test Results (Marks for Parents/Students)
-        const testDocs = await db.collection('test_results')
-            .where('studentId', '==', studentId)
-            .get();
-
+        const testDocs = await db.collection('test_results').where('studentId', '==', studentId).get();
         const tableBody = document.getElementById('test-table-body');
-        tableBody.innerHTML = ""; // Clear existing rows
-        let totalPercent = 0;
-        let count = 0;
+        tableBody.innerHTML = ""; 
+        let totalPercent = 0; let count = 0;
 
         if (testDocs.empty) {
             tableBody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-500">No test records found.</td></tr>`;
@@ -184,47 +213,27 @@ async function fetchDashboardData() {
             testDocs.forEach(doc => {
                 const test = doc.data();
                 const testPercent = Math.round((test.marksObtained / test.totalMarks) * 100);
-                totalPercent += testPercent;
-                count++;
-
-                const row = `
+                totalPercent += testPercent; count++;
+                tableBody.innerHTML += `
                     <tr class="border-b border-slate-800 hover:bg-slate-800/50 transition-all">
                         <td class="p-4 font-semibold">${test.testName}</td>
                         <td class="p-4 text-emerald-400">${test.marksObtained} / ${test.totalMarks}</td>
                         <td class="p-4 font-bold">${testPercent}%</td>
                         <td class="p-4"><span class="bg-amber-500/20 text-amber-500 px-2 py-1 rounded text-xs font-bold">#${test.rank || 'N/A'}</span></td>
-                    </tr>
-                `;
-                tableBody.innerHTML += row;
+                    </tr>`;
             });
         }
+        if (count > 0) document.getElementById('avg-score').innerText = Math.round(totalPercent / count) + '%';
 
-        if (count > 0) {
-            document.getElementById('avg-score').innerText = Math.round(totalPercent / count) + '%';
-        }
-
-        // 4. Fetch Fee Details (Without Online Payment)
-        const feeDoc = await db.collection('fees')
-            .where('studentId', '==', studentId)
-            .where('status', '==', 'due')
-            .limit(1).get();
-
+        const feeDoc = await db.collection('fees').where('studentId', '==', studentId).where('status', '==', 'due').limit(1).get();
         const payNowBtn = document.getElementById('pay-now-btn');
         if (!feeDoc.empty) {
             const fee = feeDoc.docs[0].data();
             document.getElementById('fee-due-amount').innerText = `₹${fee.amount}`;
-            
-            const dueDateStr = fee.dueDate && fee.dueDate.seconds 
-                ? new Date(fee.dueDate.seconds * 1000).toLocaleDateString() 
-                : fee.dueDate;
-            
-            document.getElementById('fee-due-date').innerText = dueDateStr || 'Not Set';
-            
+            document.getElementById('fee-due-date').innerText = fee.dueDate && fee.dueDate.seconds ? new Date(fee.dueDate.seconds * 1000).toLocaleDateString() : fee.dueDate || 'Not Set';
             payNowBtn.disabled = false;
             payNowBtn.innerText = 'Contact to Pay';
-            payNowBtn.onclick = () => {
-                showCustomAlert('Payment Info', `Online payments are currently disabled. Please contact the academy at +91 7972581080 to clear your due amount of ₹${fee.amount}.`, 'info');
-            };
+            payNowBtn.onclick = () => { showCustomAlert('Payment Info', `Online payments are currently disabled. Please contact the academy at +91 7972581080 to clear your due amount of ₹${fee.amount}.`, 'info'); };
         } else {
             document.getElementById('fee-due-amount').innerText = '₹0';
             document.getElementById('fee-due-date').innerText = 'No Dues';
@@ -233,32 +242,22 @@ async function fetchDashboardData() {
             payNowBtn.classList.replace('bg-emerald-600', 'bg-slate-800');
         }
 
-        // 5. Fetch Payment History (Manual Receipts added by Admin)
-        const paymentDocs = await db.collection('payments')
-            .where('studentId', '==', studentId)
-            .get();
-
+        const paymentDocs = await db.collection('payments').where('studentId', '==', studentId).get();
         const paymentTableBody = document.getElementById('payment-history-body');
         paymentTableBody.innerHTML = "";
-
         if (paymentDocs.empty) {
             paymentTableBody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-500">No payment history found.</td></tr>`;
         } else {
             paymentDocs.forEach(doc => {
                 const payment = doc.data();
-                const paymentDateStr = payment.paymentDate && payment.paymentDate.seconds 
-                    ? new Date(payment.paymentDate.seconds * 1000).toLocaleDateString() 
-                    : payment.paymentDate;
-
-                const row = `
+                const paymentDateStr = payment.paymentDate && payment.paymentDate.seconds ? new Date(payment.paymentDate.seconds * 1000).toLocaleDateString() : payment.paymentDate;
+                paymentTableBody.innerHTML += `
                     <tr class="border-b border-slate-800 hover:bg-slate-800/50 transition-all">
                         <td class="p-4 font-mono text-xs text-slate-400">${doc.id}</td>
                         <td class="p-4">${paymentDateStr}</td>
                         <td class="p-4 font-bold text-white">₹${payment.amount}</td>
                         <td class="p-4"><span class="bg-green-500/20 text-green-400 px-2 py-1 rounded text-[10px] uppercase font-bold">${payment.status || 'Paid'}</span></td>
-                    </tr>
-                `;
-                paymentTableBody.innerHTML += row;
+                    </tr>`;
             });
         }
 
